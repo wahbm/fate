@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c0c12" />
+    <title>问卜 · 一问观心</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="sky" aria-hidden="true"></div>
+    <header class="site-header wrap">
+      <a class="brand" href="#home" data-home><span>问</span>卜</a>
+      <nav aria-label="主导航"><a href="#methods">三法问心</a><a href="#history">问卜记录</a></nav>
+      <button class="quiet-button" type="button" data-home>回到起点</button>
+    </header>
+    <main class="wrap">
+      <section class="hero" id="home">
+        <p class="eyebrow">WENBU / 一问观心</p>
+        <h1>心有所问<br /><i>万象可观</i></h1>
+        <p class="hero-copy">暂放下喧嚣，循一枚钱、一支签、一个字，<br />为此刻的心念留一盏灯。</p>
+        <a class="seal-button" href="#methods">启一问 <span>↓</span></a>
+      </section>
+
+      <section class="methods" id="methods" aria-labelledby="methods-title">
+        <div class="section-intro"><p class="eyebrow">三法问心</p><h2 id="methods-title">选择此刻的方式</h2><p>不问生辰，不留姓名。请先在心中安放一个问题。</p></div>
+        <div class="method-grid">
+          <button class="method-card coin-card" type="button" data-method="coin"><span class="method-index">壹</span><span class="method-mark">☯</span><strong>掷铜钱</strong><small>六次起卦，观变而知进退</small><em>起卦 →</em></button>
+          <button class="method-card lot-card" type="button" data-method="lot"><span class="method-index">贰</span><span class="method-mark">筮</span><strong>抽易签</strong><small>随机一卦，直接阅读《周易》卦辞</small><em>观卦 →</em></button>
+          <button class="method-card character-card" type="button" data-method="character"><span class="method-index">叁</span><span class="method-mark">字</span><strong>算一字</strong><small>写下一个汉字，照见心中意象</small><em>测字 →</em></button>
+        </div>
+      </section>
+
+      <section class="ritual hidden" id="ritual" aria-live="polite"></section>
+      <section class="history-section" id="history"><div><p class="eyebrow">过往回音</p><h2>问卜记录</h2><p>记录只保存于此浏览器，最多留存十则。</p></div><div class="history-actions"><button class="quiet-button" id="clear-history" type="button">清空记录</button><div id="history-list" class="history-list"></div></div></section>
+    </main>
+    <footer class="site-footer wrap">问卜所得仅供娱乐与自我反思；请勿用作医疗、法律、金融或重大人生决定的依据。<span>所有内容仅留在你的浏览器中。</span></footer>
+    <template id="hexagram-template"><div class="hexagram" aria-label="六爻卦象"></div></template>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
