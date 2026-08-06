@@ -70,3 +70,11 @@ jobs:
             --exclude .wrangler/ \
             --rsh "ssh -i ~/.ssh/deploy_key -p $DEPLOY_PORT" \
             ./ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+
+      - name: Verify public site
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          curl --fail --silent --show-error --location \
+            --retry 3 --retry-delay 2 \
+            "http://$DEPLOY_HOST/fate/eight-gates/" > /dev/null
