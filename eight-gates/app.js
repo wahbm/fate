@@ -1,20 +1,111 @@
-const STATIONS = [
+const TEMPLATE = `
+  <main class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="#/" aria-label="返回 FATE 首页"><span>命</span>运</a>
+      <p>一局一命 · 不留痕迹</p>
+      <button class="text-button" id="restart-button" type="button">重开此局</button>
+      <a class="text-button" href="#/">返回总览</a>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow">FATE / 01</p>
+        <h1>酒色财气</h1>
+        <p class="intro">翻开藏于八方的牌，收拢命中注定的对子。<br />最终的四处落牌，照见这一局的酒、色、财、气。</p>
+      </div>
+      <div class="hero-rule">
+        <span>本局手牌</span>
+        <strong id="hand-count">12</strong>
+        <em>张</em>
+      </div>
+    </section>
+
+    <section class="game-layout" aria-label="酒色财气牌局">
+      <aside class="side-panel storage-panel">
+        <div class="panel-heading"><span>已收之牌</span><strong id="storage-count">0 对</strong></div>
+        <div class="storage-cards" id="storage-cards" aria-label="存牌区"></div>
+        <p class="panel-note">按收取顺序，最终轮流落入酒、色、财、气。</p>
+      </aside>
+
+      <section class="table-wrap">
+        <div class="table-frame">
+          <div class="compass-mark north">北</div>
+          <div class="compass-mark east">东</div>
+          <div class="compass-mark south">南</div>
+          <div class="compass-mark west">西</div>
+          <div class="table-felt" id="table-felt">
+            <div class="station station-n" data-station="north"></div>
+            <div class="station station-ne" data-station="northeast"></div>
+            <div class="station station-e" data-station="east"></div>
+            <div class="station station-se" data-station="southeast"></div>
+            <div class="station station-s" data-station="south"></div>
+            <div class="station station-sw" data-station="southwest"></div>
+            <div class="station station-w" data-station="west"></div>
+            <div class="station station-nw" data-station="northwest"></div>
+            <div class="center-pile" id="center-pile"></div>
+            <div class="hand-zone" id="hand-zone" aria-label="手牌"></div>
+            <div class="table-seal">酒色<br />财气</div>
+          </div>
+        </div>
+        <p class="table-caption">八方牌阵 · 从北起顺时针发牌</p>
+      </section>
+
+      <aside class="side-panel action-panel">
+        <p class="eyebrow">行牌提示</p>
+        <h2 id="status-title">正在布阵</h2>
+        <p class="status-copy" id="status-copy">牌已布好，正在查看八方明牌。</p>
+        <div class="choice-area" id="choice-area" aria-live="polite"></div>
+        <div class="legend"><span><i class="legend-up"></i>明牌</span><span><i class="legend-down"></i>暗牌</span></div>
+      </aside>
+    </section>
+
+    <section class="rules-strip">
+      <span>同点数即可成对</span><i></i><span>中央牌仅首尾可配</span><i></i><span>终局仅同堆一明一暗可配</span>
+    </section>
+  </main>
+
+  <dialog class="result-dialog" id="result-dialog">
+    <div class="result-topline" id="result-topline">本局收束</div>
+    <h2>酒色财气</h2>
+    <p class="lucky-result">你的幸运方位：<strong id="lucky-direction">—</strong></p>
+    <div class="fortune-grid" id="fortune-grid"></div>
+    <p class="result-note" id="result-note"></p>
+    <section class="unresolved-record" id="unresolved-record" hidden aria-label="未收拢的牌">
+      <h3>未收拢的牌</h3>
+      <p id="unresolved-note"></p>
+    </section>
+    <details class="game-record" id="game-record">
+      <summary>本局牌谱／结算明细</summary>
+      <p class="record-intro">按收牌顺序归入酒、色、财、气；同一项凑齐四张同点数牌才计分。</p>
+      <div class="record-list" id="record-list"></div>
+    </details>
+    <button class="primary-button" id="dialog-restart" type="button">再启一局</button>
+  </dialog>
+
+  <template id="card-template">
+    <div class="card"><span class="rank"></span><span class="suit"></span><span class="card-rank-large"></span></div>
+  </template>
+`;
+
+export function mount(root) {
+  root.innerHTML = TEMPLATE;
+  const STATIONS = [
   { id: 'north', name: '北' }, { id: 'northeast', name: '东北' }, { id: 'east', name: '东' }, { id: 'southeast', name: '东南' },
   { id: 'south', name: '南' }, { id: 'southwest', name: '西南' }, { id: 'west', name: '西' }, { id: 'northwest', name: '西北' },
-];
-const SUITS = [{ symbol: '♠', red: false }, { symbol: '♥', red: true }, { symbol: '♣', red: false }, { symbol: '♦', red: true }];
-const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-const VALUE = Object.fromEntries(RANKS.map((rank, index) => [rank, index + 1]));
-const els = {
-  handCount: document.querySelector('#hand-count'), storageCount: document.querySelector('#storage-count'), storageCards: document.querySelector('#storage-cards'),
-  centerPile: document.querySelector('#center-pile'), handZone: document.querySelector('#hand-zone'), statusTitle: document.querySelector('#status-title'),
-  statusCopy: document.querySelector('#status-copy'), choiceArea: document.querySelector('#choice-area'), restartButton: document.querySelector('#restart-button'),
-  dialogRestart: document.querySelector('#dialog-restart'), resultDialog: document.querySelector('#result-dialog'), luckyDirection: document.querySelector('#lucky-direction'),
-  fortuneGrid: document.querySelector('#fortune-grid'), resultTopline: document.querySelector('#result-topline'), resultNote: document.querySelector('#result-note'),
-  unresolvedRecord: document.querySelector('#unresolved-record'), unresolvedNote: document.querySelector('#unresolved-note'), recordList: document.querySelector('#record-list'),
-};
-let game;
-let terminalTimer = null;
+  ];
+  const SUITS = [{ symbol: '♠', red: false }, { symbol: '♥', red: true }, { symbol: '♣', red: false }, { symbol: '♦', red: true }];
+  const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+  const VALUE = Object.fromEntries(RANKS.map((rank, index) => [rank, index + 1]));
+  const els = {
+    handCount: root.querySelector('#hand-count'), storageCount: root.querySelector('#storage-count'), storageCards: root.querySelector('#storage-cards'),
+    centerPile: root.querySelector('#center-pile'), handZone: root.querySelector('#hand-zone'), statusTitle: root.querySelector('#status-title'),
+    statusCopy: root.querySelector('#status-copy'), choiceArea: root.querySelector('#choice-area'), restartButton: root.querySelector('#restart-button'),
+    dialogRestart: root.querySelector('#dialog-restart'), resultDialog: root.querySelector('#result-dialog'), luckyDirection: root.querySelector('#lucky-direction'),
+    fortuneGrid: root.querySelector('#fortune-grid'), resultTopline: root.querySelector('#result-topline'), resultNote: root.querySelector('#result-note'),
+    unresolvedRecord: root.querySelector('#unresolved-record'), unresolvedNote: root.querySelector('#unresolved-note'), recordList: root.querySelector('#record-list'),
+  };
+  let game;
+  let terminalTimer = null;
 
 function shuffledDeck() {
   const deck = SUITS.flatMap(suit => RANKS.map(rank => ({ rank, ...suit })));
@@ -35,7 +126,7 @@ function startGame() {
 }
 
 function cardElement(card, className = '') {
-  const node = document.querySelector('#card-template').content.firstElementChild.cloneNode(true);
+  const node = root.querySelector('#card-template').content.firstElementChild.cloneNode(true);
   if (className) node.classList.add(className);
   if (!card) return node;
   node.classList.toggle('red', card.red);
@@ -63,25 +154,25 @@ function refresh() {
 }
 
 function renderStation(station) {
-  const root = document.querySelector(`[data-station="${station.id}"]`);
-  root.replaceChildren();
+  const stationRoot = root.querySelector(`[data-station="${station.id}"]`);
+  stationRoot.replaceChildren();
   const isTerminalMatch = game.phase === 'terminal' && terminalMatchingStationIds().includes(station.id);
-  root.classList.toggle('terminal-match', isTerminalMatch);
-  const name = document.createElement('span'); name.className = 'station-name'; name.textContent = station.name; root.append(name);
+  stationRoot.classList.toggle('terminal-match', isTerminalMatch);
+  const name = document.createElement('span'); name.className = 'station-name'; name.textContent = station.name; stationRoot.append(name);
   if (station.dark.length) {
     const dark = cardBack();
     if (isTerminalMatch) dark.classList.add('terminal-card');
-    root.append(dark);
+    stationRoot.append(dark);
   }
   if (station.face) {
     const face = cardElement(station.face, 'active-card');
     if (isTerminalMatch) face.classList.add('terminal-card');
     if (stationIsSelectable(station.id)) makeClickable(face, () => selectStation(station.id), `${station.name}方 ${station.face.rank}${station.face.symbol}`);
     if ((game.selection?.kind === 'desk' || game.selection?.kind === 'station') && game.selection.station === station.id) face.classList.add('is-selected');
-    root.append(face);
+    stationRoot.append(face);
   }
-  const count = document.createElement('span'); count.className = 'station-count'; count.textContent = `暗牌 ${station.dark.length}`; root.append(count);
-  if (game.lucky === station.id) { const lucky = document.createElement('span'); lucky.className = 'station-lucky'; lucky.textContent = '✦ 幸运方位'; root.append(lucky); }
+  const count = document.createElement('span'); count.className = 'station-count'; count.textContent = `暗牌 ${station.dark.length}`; stationRoot.append(count);
+  if (game.lucky === station.id) { const lucky = document.createElement('span'); lucky.className = 'station-lucky'; lucky.textContent = '✦ 幸运方位'; stationRoot.append(lucky); }
 }
 
 function renderCenter() {
@@ -192,13 +283,13 @@ function selectCenterCard(index) {
   setGuide(`已选择中央${centerPosition(index)} ${game.center[index].rank}，请点击桌上同点数明牌。`); refresh();
 }
 
-function sourceCard(stationId) { return document.querySelector(`[data-station="${stationId}"] .active-card`); }
-function sourceCenterCard(index) { return document.querySelector(`.center-card[data-center-index="${index}"]`); }
+function sourceCard(stationId) { return root.querySelector(`[data-station="${stationId}"] .active-card`); }
+function sourceCenterCard(index) { return root.querySelector(`.center-card[data-center-index="${index}"]`); }
 
 function animateCollection(cards, sourceNodes) {
   const destination = els.storageCards.getBoundingClientRect();
   const storageIsVisible = destination.width > 0 && destination.height > 0;
-  const table = document.querySelector('#table-felt').getBoundingClientRect();
+  const table = root.querySelector('#table-felt').getBoundingClientRect();
   const destinationX = storageIsVisible ? destination.left + 16 : table.left + 18;
   const destinationY = storageIsVisible ? destination.top + 18 : table.top + table.height * .68;
   const nextFrame = window.requestAnimationFrame || (callback => window.setTimeout(callback, 0));
@@ -280,7 +371,7 @@ function settleTerminalStationPairs() {
   terminalMatchingStationIds().forEach(id => {
     const station = game.stations[id];
     if (station) {
-      collectPair([station.face, station.dark[0]], `终局配对：${station.name}方`, [sourceCard(id), document.querySelector(`[data-station="${id}"] .back`)]);
+      collectPair([station.face, station.dark[0]], `终局配对：${station.name}方`, [sourceCard(id), root.querySelector(`[data-station="${id}"] .back`)]);
       station.face = null;
       station.dark = [];
       if (!game.lucky) game.lucky = id;
@@ -363,3 +454,8 @@ function renderGameRecord(fortunes) {
 els.restartButton.addEventListener('click', startGame);
 els.dialogRestart.addEventListener('click', startGame);
 startGame();
+return () => {
+  if (terminalTimer) window.clearTimeout(terminalTimer);
+  root.replaceChildren();
+};
+}

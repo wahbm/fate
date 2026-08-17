@@ -3,99 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="酒色财气八方牌阵：翻开藏于八方的牌，收拢命中注定的对子。" />
-    <title>命运 · 酒色财气</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./styles.css" />
+    <meta http-equiv="refresh" content="0; url=../#/eight-gates" />
+    <title>正在进入 FATE · 八方牌局</title>
   </head>
   <body>
-    <main class="page-shell">
-      <header class="site-header">
-        <a class="brand" href="./" aria-label="命运首页"><span>命</span>运</a>
-        <p>一局一命 · 不留痕迹</p>
-        <button class="text-button" id="restart-button" type="button">重开此局</button>
-      </header>
-
-      <section class="hero">
-        <div>
-          <p class="eyebrow">FATE / 01</p>
-          <h1>酒色财气</h1>
-          <p class="intro">翻开藏于八方的牌，收拢命中注定的对子。<br />最终的四处落牌，照见这一局的酒、色、财、气。</p>
-        </div>
-        <div class="hero-rule">
-          <span>本局手牌</span>
-          <strong id="hand-count">12</strong>
-          <em>张</em>
-        </div>
-      </section>
-
-      <section class="game-layout" aria-label="酒色财气牌局">
-        <aside class="side-panel storage-panel">
-          <div class="panel-heading"><span>已收之牌</span><strong id="storage-count">0 对</strong></div>
-          <div class="storage-cards" id="storage-cards" aria-label="存牌区"></div>
-          <p class="panel-note">按收取顺序，最终轮流落入酒、色、财、气。</p>
-        </aside>
-
-        <section class="table-wrap">
-          <div class="table-frame">
-            <div class="compass-mark north">北</div>
-            <div class="compass-mark east">东</div>
-            <div class="compass-mark south">南</div>
-            <div class="compass-mark west">西</div>
-            <div class="table-felt" id="table-felt">
-              <div class="station station-n" data-station="north"></div>
-              <div class="station station-ne" data-station="northeast"></div>
-              <div class="station station-e" data-station="east"></div>
-              <div class="station station-se" data-station="southeast"></div>
-              <div class="station station-s" data-station="south"></div>
-              <div class="station station-sw" data-station="southwest"></div>
-              <div class="station station-w" data-station="west"></div>
-              <div class="station station-nw" data-station="northwest"></div>
-              <div class="center-pile" id="center-pile"></div>
-              <div class="hand-zone" id="hand-zone" aria-label="手牌"></div>
-              <div class="table-seal">酒色<br />财气</div>
-            </div>
-          </div>
-          <p class="table-caption">八方牌阵 · 从北起顺时针发牌</p>
-        </section>
-
-        <aside class="side-panel action-panel">
-          <p class="eyebrow">行牌提示</p>
-          <h2 id="status-title">正在布阵</h2>
-          <p class="status-copy" id="status-copy">牌已布好，正在查看八方明牌。</p>
-          <div class="choice-area" id="choice-area" aria-live="polite"></div>
-          <div class="legend"><span><i class="legend-up"></i>明牌</span><span><i class="legend-down"></i>暗牌</span></div>
-        </aside>
-      </section>
-
-      <section class="rules-strip">
-        <span>同点数即可成对</span><i></i><span>中央牌仅首尾可配</span><i></i><span>终局仅同堆一明一暗可配</span>
-      </section>
-    </main>
-
-    <dialog class="result-dialog" id="result-dialog">
-      <div class="result-topline" id="result-topline">本局收束</div>
-      <h2>酒色财气</h2>
-      <p class="lucky-result">你的幸运方位：<strong id="lucky-direction">—</strong></p>
-      <div class="fortune-grid" id="fortune-grid"></div>
-      <p class="result-note" id="result-note"></p>
-      <section class="unresolved-record" id="unresolved-record" hidden aria-label="未收拢的牌">
-        <h3>未收拢的牌</h3>
-        <p id="unresolved-note"></p>
-      </section>
-      <details class="game-record" id="game-record">
-        <summary>本局牌谱／结算明细</summary>
-        <p class="record-intro">按收牌顺序归入酒、色、财、气；同一项凑齐四张同点数牌才计分。</p>
-        <div class="record-list" id="record-list"></div>
-      </details>
-      <button class="primary-button" id="dialog-restart" type="button">再启一局</button>
-    </dialog>
-
-    <template id="card-template">
-      <div class="card"><span class="rank"></span><span class="suit"></span><span class="card-rank-large"></span></div>
-    </template>
-    <script src="./app.js"></script>
+    <p>正在进入 FATE 八方牌局……</p>
+    <script>window.location.replace('../#/eight-gates');</script>
   </body>
 </html>

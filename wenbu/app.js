@@ -1,9 +1,42 @@
 import { CHARACTER_IMAGES, HEXAGRAM_DATA, LOTS, TRIGRAMS, getHexagram } from './fortune-data.js';
 
-const ritual = document.querySelector('#ritual');
-const historyList = document.querySelector('#history-list');
-const storageKey = 'wenbu-history-v1';
-let coinLines = [];
+const TEMPLATE = `
+  <header class="site-header wrap">
+    <a class="brand" href="#/" aria-label="返回 FATE 首页"><span>问</span>卜</a>
+    <nav aria-label="问卜导航"><a href="#methods" data-scroll="methods">三法问心</a><a href="#history" data-scroll="history">问卜记录</a></nav>
+    <a class="quiet-button" href="#/">返回总览</a>
+  </header>
+  <main class="wrap">
+    <section class="hero" id="home">
+      <p class="eyebrow">WENBU / 一问观心</p>
+      <h1>心有所问<br /><i>万象可观</i></h1>
+      <p class="hero-copy">暂放下喧嚣，循一枚钱、一支签、一个字，<br />为此刻的心念留一盏灯。</p>
+      <a class="seal-button" href="#methods" data-scroll="methods">启一问 <span>↓</span></a>
+    </section>
+
+    <section class="methods" id="methods" aria-labelledby="methods-title">
+      <div class="section-intro"><p class="eyebrow">三法问心</p><h2 id="methods-title">选择此刻的方式</h2><p>不问生辰，不留姓名。请先在心中安放一个问题。</p></div>
+      <div class="method-grid">
+        <button class="method-card coin-card" type="button" data-method="coin"><span class="method-index">壹</span><span class="method-mark">☯</span><strong>掷铜钱</strong><small>六次起卦，观变而知进退</small><em>起卦 →</em></button>
+        <button class="method-card lot-card" type="button" data-method="lot"><span class="method-index">贰</span><span class="method-mark">筮</span><strong>抽易签</strong><small>随机一卦，直接阅读《周易》卦辞</small><em>观卦 →</em></button>
+        <button class="method-card character-card" type="button" data-method="character"><span class="method-index">叁</span><span class="method-mark">字</span><strong>算一字</strong><small>写下一个汉字，照见心中意象</small><em>测字 →</em></button>
+      </div>
+    </section>
+
+    <section class="ritual hidden" id="ritual" aria-live="polite"></section>
+    <section class="history-section" id="history"><div><p class="eyebrow">过往回音</p><h2>问卜记录</h2><p>记录只保存于此浏览器，最多留存十则。</p></div><div class="history-actions"><button class="quiet-button" id="clear-history" type="button">清空记录</button><div id="history-list" class="history-list"></div></div></section>
+  </main>
+  <footer class="site-footer wrap">问卜所得仅供娱乐与自我反思；请勿用作医疗、法律、金融或重大人生决定的依据。<span>所有内容仅留在你的浏览器中。</span></footer>
+  <template id="hexagram-template"><div class="hexagram" aria-label="六爻卦象"></div></template>
+`;
+
+export function mount(root, initialMethod = null) {
+  root.innerHTML = TEMPLATE;
+  const controller = new AbortController();
+  const ritual = root.querySelector('#ritual');
+  const historyList = root.querySelector('#history-list');
+  const storageKey = 'wenbu-history-v1';
+  let coinLines = [];
 
 const esc = value => String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
 const readHistory = () => { try { return JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch { return []; } };
@@ -11,7 +44,7 @@ const writeHistory = records => localStorage.setItem(storageKey, JSON.stringify(
 const formatDate = stamp => new Intl.DateTimeFormat('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(stamp));
 
 function renderHexagram(lines, moving = []) {
-  const node = document.querySelector('#hexagram-template').content.firstElementChild.cloneNode(true);
+  const node = root.querySelector('#hexagram-template').content.firstElementChild.cloneNode(true);
   [...lines].reverse().forEach((line, reversedIndex) => {
     const index = lines.length - 1 - reversedIndex;
     const row = document.createElement('span');
@@ -82,9 +115,11 @@ function readCharacter(character) {
   ritual.querySelector('[data-save-character]').addEventListener('click', () => { addHistory({ type: '算一字', title: `「${character}」字之象`, lead, body }); ritual.querySelector('[data-save-character]').textContent = '已收下此字'; ritual.querySelector('[data-save-character]').disabled = true; });
 }
 
-document.addEventListener('click', event => {
+root.addEventListener('click', event => {
+  const scrollTarget = event.target.closest('[data-scroll]');
+  if (scrollTarget) { event.preventDefault(); root.querySelector(`#${scrollTarget.dataset.scroll}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
   const method = event.target.closest('[data-method]'); if (method) showMethod(method.dataset.method);
-  if (event.target.closest('[data-home]')) { ritual.classList.add('hidden'); document.querySelector('#home').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  if (event.target.closest('[data-home]')) { ritual.classList.add('hidden'); root.querySelector('#home').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   if (event.target.closest('#toss-coin')) tossCoin();
   if (event.target.closest('#reveal-hexagram')) revealHexagram();
   if (event.target.closest('#restart-coin')) renderCoinStart();
@@ -93,11 +128,14 @@ document.addEventListener('click', event => {
   if (event.target.closest('#restart-character')) renderCharacterStart();
   const history = event.target.closest('[data-history-index]'); if (history) openRecord(readHistory()[Number(history.dataset.historyIndex)]);
   if (event.target.closest('#clear-history')) { localStorage.removeItem(storageKey); renderHistory(); }
-});
-document.addEventListener('submit', event => {
+}, { signal: controller.signal });
+root.addEventListener('submit', event => {
   if (event.target.id !== 'character-form') return;
   event.preventDefault(); const input = event.target.elements.character; const value = input.value.trim(); const error = ritual.querySelector('#character-error');
   if (!/^[\u3400-\u9fff\uf900-\ufaff]$/u.test(value)) { error.textContent = '请只写下一个汉字。'; input.focus(); return; }
   readCharacter(value);
-});
+}, { signal: controller.signal });
 renderHistory();
+if (['coin', 'lot', 'character'].includes(initialMethod)) showMethod(initialMethod);
+return () => { controller.abort(); root.replaceChildren(); };
+}

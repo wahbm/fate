@@ -1,0 +1,97 @@
+:root {
+  --fate-ink: #20221d;
+  --fate-ink-soft: #656255;
+  --fate-paper: #efe5cf;
+  --fate-paper-deep: #dfcda9;
+  --fate-red: #a43c31;
+  --fate-red-dark: #762c27;
+  --fate-gold: #b28a4d;
+  --fate-line: rgba(105, 79, 42, .23);
+  --fate-shadow: rgba(40, 28, 12, .18);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { min-width: 320px; margin: 0; background: var(--fate-paper); color: var(--fate-ink); font-family: "Songti SC", "STSong", "Noto Serif SC", serif; }
+a { color: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+
+.fate-home { position: relative; isolation: isolate; min-height: 100vh; overflow: hidden; background: radial-gradient(circle at 80% 9%, rgba(210, 184, 125, .38), transparent 25%), linear-gradient(135deg, #f4eddd 0%, var(--fate-paper) 54%, #e8d8b9 100%); }
+.fate-home::before { position: absolute; z-index: -1; inset: 0; pointer-events: none; content: ""; opacity: .32; background-image: radial-gradient(rgba(91, 66, 33, .16) .6px, transparent .7px); background-size: 7px 7px; mix-blend-mode: multiply; }
+.fate-home::after { position: absolute; z-index: -1; top: 110px; right: -130px; width: 420px; height: 420px; border: 1px solid rgba(137, 91, 43, .17); border-radius: 50%; box-shadow: 0 0 0 17px rgba(137, 91, 43, .035), 0 0 0 48px rgba(137, 91, 43, .035); content: ""; }
+.fate-shell { width: min(1160px, calc(100% - 64px)); margin-inline: auto; }
+.fate-header { display: flex; align-items: center; min-height: 86px; gap: 34px; border-bottom: 1px solid var(--fate-line); }
+.fate-brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.fate-brand-seal { display: grid; place-items: center; width: 34px; height: 34px; color: #f6ead2; background: var(--fate-red); font-size: 18px; line-height: 1; box-shadow: 3px 3px 0 rgba(105, 51, 35, .2); }
+.fate-brand-name { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 16px; font-weight: 800; letter-spacing: .14em; }
+.fate-brand small { margin-left: 3px; color: var(--fate-ink-soft); font-size: 10px; letter-spacing: .16em; }
+.fate-nav { display: flex; gap: 25px; margin-left: 26px; }
+.fate-nav a { color: var(--fate-ink-soft); font-size: 12px; letter-spacing: .16em; text-decoration: none; }
+.fate-nav a:hover { color: var(--fate-red); }
+.fate-header-note { margin-left: auto; color: var(--fate-gold); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; letter-spacing: .2em; }
+.fate-hero { display: grid; grid-template-columns: 1.15fr .85fr; align-items: center; min-height: 625px; padding-block: 90px 110px; }
+.fate-kicker { margin: 0 0 17px; color: var(--fate-red); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; font-weight: 800; letter-spacing: .22em; }
+.fate-hero h1 { margin: 0; color: var(--fate-ink); font-size: clamp(68px, 9vw, 126px); font-weight: 500; line-height: .95; letter-spacing: .08em; }
+.fate-hero h1 em { color: var(--fate-red); font-size: .54em; font-style: normal; letter-spacing: .25em; }
+.fate-hero-lead { margin: 29px 0 34px; color: var(--fate-ink-soft); font-size: 15px; line-height: 2; letter-spacing: .12em; }
+.fate-primary-button { display: inline-flex; align-items: center; justify-content: center; gap: 24px; min-width: 158px; padding: 15px 20px; color: #fff4dd; background: var(--fate-red); box-shadow: 5px 5px 0 rgba(112, 47, 35, .17); font-size: 13px; letter-spacing: .2em; text-decoration: none; transition: transform .2s, background .2s; }
+.fate-primary-button:hover { background: var(--fate-red-dark); transform: translateY(-3px); }
+.fate-primary-button span { color: #eacb93; font-size: 18px; }
+.fate-hero-mark { position: relative; justify-self: end; display: grid; place-items: center; width: min(360px, 75vw); aspect-ratio: 1; border: 1px solid rgba(137, 91, 43, .3); border-radius: 50%; color: var(--fate-gold); transform: rotate(-8deg); }
+.fate-hero-mark::before, .fate-hero-mark::after { position: absolute; inset: 20px; border: 1px solid rgba(137, 91, 43, .22); border-radius: 50%; content: ""; }
+.fate-hero-mark::after { inset: 42px; border-style: dashed; }
+.fate-hero-mark span { color: rgba(164, 60, 49, .78); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 108px; font-weight: 800; letter-spacing: -.18em; }
+.fate-hero-mark i { position: absolute; color: var(--fate-red); font-size: 74px; font-style: normal; transform: rotate(8deg); }
+.fate-hero-mark small { position: absolute; bottom: 70px; color: var(--fate-ink-soft); font-size: 10px; letter-spacing: .21em; transform: rotate(8deg); }
+.fate-section { padding-block: 42px 122px; }
+.fate-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 34px; }
+.fate-section-heading h2, .fate-about h2 { margin: 0; font-size: clamp(31px, 4vw, 48px); font-weight: 500; letter-spacing: .1em; }
+.fate-section-heading > p { margin: 0 0 5px; color: var(--fate-ink-soft); font-size: 12px; line-height: 1.9; text-align: right; }
+.fate-algorithm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+.fate-algorithm-card { position: relative; display: flex; min-height: 285px; flex-direction: column; overflow: hidden; padding: 25px 23px 22px; border: 1px solid var(--fate-line); background: rgba(255, 251, 239, .42); box-shadow: 0 9px 24px rgba(66, 46, 19, .045); text-decoration: none; transition: transform .24s, border-color .24s, box-shadow .24s; }
+.fate-algorithm-card::after { position: absolute; right: -55px; bottom: -58px; width: 160px; height: 160px; border: 1px solid rgba(137, 91, 43, .2); border-radius: 50%; content: ""; }
+.fate-algorithm-card:hover { border-color: rgba(164, 60, 49, .65); box-shadow: 0 17px 34px var(--fate-shadow); transform: translateY(-7px); }
+.fate-card-index { color: var(--fate-gold); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 9px; letter-spacing: .14em; }
+.fate-algorithm-card strong { z-index: 1; margin-top: auto; color: var(--fate-ink); font-size: 28px; font-weight: 500; letter-spacing: .16em; }
+.fate-algorithm-card p { z-index: 1; min-height: 48px; margin: 10px 0 22px; color: var(--fate-ink-soft); font-size: 12px; line-height: 1.8; }
+.fate-card-action { z-index: 1; display: flex; align-items: center; justify-content: space-between; padding-top: 13px; border-top: 1px solid var(--fate-line); color: var(--fate-red); font-size: 11px; letter-spacing: .14em; }
+.fate-card-action b { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 18px; font-weight: 400; }
+.fate-card-coin { background: linear-gradient(155deg, rgba(247, 231, 190, .6), rgba(255, 251, 239, .2)); }
+.fate-card-lot { background: linear-gradient(155deg, rgba(224, 207, 164, .52), rgba(255, 251, 239, .2)); }
+.fate-card-character { background: linear-gradient(155deg, rgba(237, 208, 184, .48), rgba(255, 251, 239, .2)); }
+.fate-card-game { color: #f3e7cc; background: linear-gradient(155deg, #30382e, #1f2823); }
+.fate-card-game strong { color: #f3e7cc; }
+.fate-card-game p { color: #b9b5a0; }
+.fate-card-game .fate-card-action { border-color: rgba(234, 205, 147, .24); color: #ddbd7c; }
+.fate-about { display: grid; grid-template-columns: 160px 1fr; align-items: center; gap: 64px; padding-block: 92px 105px; border-top: 1px solid var(--fate-line); }
+.fate-about-seal { display: grid; place-items: center; width: 145px; height: 145px; border: 1px solid rgba(164, 60, 49, .52); color: var(--fate-red); font-size: 64px; transform: rotate(7deg); box-shadow: inset 0 0 0 9px rgba(164, 60, 49, .04); }
+.fate-about h2 { max-width: 760px; font-size: clamp(27px, 3.5vw, 43px); }
+.fate-about p { max-width: 710px; margin: 24px 0 0; color: var(--fate-ink-soft); font-size: 14px; line-height: 2; letter-spacing: .04em; }
+.fate-about .fate-about-note { margin-top: 14px; color: var(--fate-red); font-size: 11px; }
+.fate-footer { display: flex; justify-content: space-between; gap: 24px; padding-block: 24px 31px; border-top: 1px solid var(--fate-line); color: var(--fate-ink-soft); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 9px; letter-spacing: .14em; }
+
+@media (max-width: 980px) {
+  .fate-algorithm-grid { grid-template-columns: repeat(2, 1fr); }
+  .fate-hero { min-height: 570px; }
+}
+
+@media (max-width: 700px) {
+  .fate-shell { width: min(100% - 32px, 620px); }
+  .fate-header { min-height: 70px; gap: 16px; }
+  .fate-brand small, .fate-nav { display: none; }
+  .fate-header-note { font-size: 9px; }
+  .fate-hero { display: block; min-height: auto; padding-block: 92px 110px; }
+  .fate-hero h1 { font-size: clamp(57px, 17vw, 85px); }
+  .fate-hero-mark { width: min(280px, 72vw); margin: 78px auto 0; }
+  .fate-hero-mark span { font-size: 80px; }
+  .fate-hero-mark i { font-size: 58px; }
+  .fate-hero-mark small { bottom: 48px; font-size: 8px; }
+  .fate-section-heading { display: block; }
+  .fate-section-heading > p { margin-top: 18px; text-align: left; }
+  .fate-algorithm-grid { grid-template-columns: 1fr; }
+  .fate-algorithm-card { min-height: 230px; }
+  .fate-about { grid-template-columns: 1fr; gap: 38px; padding-block: 75px 85px; }
+  .fate-about-seal { width: 94px; height: 94px; font-size: 43px; }
+  .fate-footer { display: block; line-height: 2; }
+  .fate-footer span { display: block; }
+}
