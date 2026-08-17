@@ -11,7 +11,8 @@
     <div id="app" aria-live="polite"></div>
     <script>
       const referrerPath = document.referrer ? new URL(document.referrer).pathname.replace(/\/+$/, '') : '';
-      const cameFromRoot = referrerPath === '/fate';
+      const navigation = window.performance?.getEntriesByType?.('navigation')?.[0];
+      const cameFromRoot = referrerPath === '/fate' || navigation?.redirectCount > 0;
       if (!window.location.hash) window.location.hash = cameFromRoot ? '#/' : '#/eight-gates';
     </script>
     <script type="module" src="./app.js"></script>
