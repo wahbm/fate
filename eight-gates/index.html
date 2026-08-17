@@ -3,11 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="refresh" content="0; url=../#/eight-gates" />
-    <title>正在进入 FATE · 八方牌局</title>
+    <base href="../" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>FATE · 八方牌局</title>
   </head>
   <body>
-    <p>正在进入 FATE 八方牌局……</p>
-    <script>window.location.replace('../#/eight-gates');</script>
+    <div id="app" aria-live="polite"></div>
+    <script>
+      const referrerPath = document.referrer ? new URL(document.referrer).pathname.replace(/\/+$/, '') : '';
+      const cameFromRoot = referrerPath === '/fate';
+      if (!window.location.hash) window.location.hash = cameFromRoot ? '#/' : '#/eight-gates';
+    </script>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>

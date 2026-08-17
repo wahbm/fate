@@ -23,7 +23,7 @@
 - `wenbu/app.js`：导出 `mount(root, initialMethod)`，负责问卜视图和本地历史。
 - `wenbu/fortune-data.js`：八卦、六十四卦和测字数据源。
 - `eight-gates/app.js`：导出 `mount(root)`，负责牌局状态机、动画和结算。
-- `wenbu/index.html`、`eight-gates/index.html`：旧书签兼容跳转，不是业务入口。
+- `wenbu/index.html`、`eight-gates/index.html`：旧书签兼容 bootstrap；通过 `<base>` 直接挂载根应用并设置默认 hash，不再承载业务逻辑，也不会因 Nginx 目录跳转形成循环。
 - `.github/workflows/deploy.yml`：生产部署和统一入口验证。
 
 ## 视图生命周期
@@ -55,7 +55,7 @@
 
 - 使用 hash 路由，避免为静态 ECS/Nginx 增加 fallback 配置。
 - 统一入口展示所有能力，功能模块只负责视图和业务逻辑。
-- 保留旧目录作为兼容跳转，避免已有书签失效。
+- 保留旧目录作为兼容 bootstrap，避免已有书签失效；即使 ECS/Nginx 把 `/fate/` 目录入口转到旧目录，仍由根应用接管页面。
 - 按路由动态加载功能页 CSS，避免两个旧页面的全局样式互相污染首页和彼此。
 - 不引入框架、打包器或运行时依赖；修改应保持可直接静态托管。
 
