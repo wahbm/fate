@@ -35,4 +35,4 @@ node --check eight-gates/app.js
 python3 -m http.server 4173
 ```
 
-本地服务下检查首页、四个算法路由、旧路径跳转，以及问卜入口和牌局初始化；不要只检查 HTTP 200。
+本地服务下检查首页、四个算法路由、旧路径兼容 bootstrap，以及问卜入口和牌局初始化；不要只检查 HTTP 200。

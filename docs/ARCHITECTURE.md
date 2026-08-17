@@ -49,13 +49,15 @@
 - Actions checkout 后，用 SSH 创建 `${DEPLOY_PATH}`，再用 `rsync --delete` 同步仓库内容。
 - 配置来自 `DEPLOY_HOST`、`DEPLOY_KNOWN_HOSTS`、`DEPLOY_PATH`、`DEPLOY_PORT`、`DEPLOY_USER` Variables 和 `SSH_PRIVATE_KEY` Secret。
 - 工作流至少验证 `/fate/` 返回包含 `id="app"`，并检查旧 `/fate/eight-gates/` 路径可访问。
-- 线上最后确认的旧基线页面是 `https://8.130.116.192/fate/wenbu/` 和 `https://8.130.116.192/fate/eight-gates/`；本轮改造部署后，入口应使用 `https://8.130.116.192/fate/#/`。
+- 2026-08-17 已确认提交 `5253ca4` 的 Actions run #13 成功；线上入口为 `https://8.130.116.192/fate/`。
+- ECS/Nginx 目前仍把 `/fate/` 302 到 `/fate/eight-gates/`，兼容 bootstrap 会在该地址加载根应用并进入 `#/`；线上浏览器已验证首页四张算法卡片、`/wenbu/` 和 `/eight-gates/` 均无控制台错误。
 
 ## 关键设计决策
 
 - 使用 hash 路由，避免为静态 ECS/Nginx 增加 fallback 配置。
 - 统一入口展示所有能力，功能模块只负责视图和业务逻辑。
 - 保留旧目录作为兼容 bootstrap，避免已有书签失效；即使 ECS/Nginx 把 `/fate/` 目录入口转到旧目录，仍由根应用接管页面。
+- 在 Nginx 入口配置尚未调整前，不要删除兼容 bootstrap；否则 `/fate/` 的现有 302 会再次导致入口不可用。
 - 按路由动态加载功能页 CSS，避免两个旧页面的全局样式互相污染首页和彼此。
 - 不引入框架、打包器或运行时依赖；修改应保持可直接静态托管。
 
